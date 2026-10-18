@@ -39,8 +39,7 @@
 
 ## What This Does
 
-TakeMeter classifies posts from r/truegaming into four labels: `analysis`, `hot_take`, `question`, and `industry`. The goal is to sort high-effort design discussion and industry commentary from opinionated venting and recommendation requests. The classifier is a fine-tuned small language model, trained on 180 posts I labeled by hand from the public subreddit.
-
+TakeMeter classifies posts from r/truegaming into four labels: `analysis`, `hot_take`, `question`, and `industry`. The goal is to sort high-effort design discussion and industry commentary from opinionated venting and recommendation requests. The classifier is a fine-tuned small language model, trained on 250 posts I labeled by hand from the public subreddit.
 ---
 
 ## Label Taxonomy
@@ -97,48 +96,36 @@ Community: r/truegaming. Posts are sorted into four labels.
 
 ## The Dataset
 
-<!-- Where you collected from, how you labelled, your counts, and three hard
-     cases. -->
+**Where the posts came from:** Public text posts from `r/truegaming`, collected via the Arctic Shift Reddit archive API. I filtered out links, image posts, and moderator megathreads to ensure the model only learns from actual discussion text.
 
-**Where the posts came from:**
-
-**How I labelled them:** <!-- Cold first? Pre-labelled with AI and corrected?
-Say so plainly — the disclosure is required, not penalised. -->
+**How I labelled them:** I manually labeled the first 20 posts without any AI help to establish a baseline (`cold`). For the remaining 230 posts, I used a rule-based script combined with AI pre-labeling based on my exact definitions, then manually reviewed the results (`pre-labeled`).
 
 **Counts per label:**
 
 | Label | Count | Share |
 |---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-| **Total** |  | 100% |
+| `analysis` | 76 | 30.4% |
+| `hot_take` | 63 | 25.2% |
+| `industry` | 62 | 24.8% |
+| `question` | 49 | 19.6% |
+| **Total** | **250** | **100%** |
 
 **Three hard cases**
 
-<!-- Any post that made you pause: what it was, which two labels it could have
-     been, and what you chose. These are worth more than the easy 190. -->
-
 **1.**
-> *The post:*
->
-> *Could have been:*
->
-> *I chose, because:*
+> *The post:* "I've been thinking quite a bit about ARC Raiders' introduction of a PvE-only matchmaking option..."
+> *Could have been:* `analysis` / `hot_take`
+> *I chose `analysis`, because:* While it is a strong opinion, the author spends 1,500 words breaking down the exact mechanical and ecosystem consequences of the change, rather than just saying "PvE is bad."
 
 **2.**
-> *The post:*
->
-> *Could have been:*
->
-> *I chose, because:*
+> *The post:* "Things I know for a fact: This game will be 20 dollars if I wishlist it and wait for 2 years..."
+> *Could have been:* `question` / `hot_take`
+> *I chose `hot_take`, because:* It's written as a humorous, subjective lament about backlog FOMO, not an actual request for advice, even though it ends with "Help me gamers".
 
 **3.**
-> *The post:*
->
-> *Could have been:*
->
-> *I chose, because:*
+> *The post:* "The point of this post is to be a sort of frustrated discussion on the diminishing return in graphical fidelity..."
+> *Could have been:* `analysis` / `industry`
+> *I chose `industry`, because:* It focuses heavily on hardware specs, GPU prices, and development budgets pushing the industry in a certain direction, rather than analyzing game mechanics or narrative design.
 
 ---
 
