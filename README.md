@@ -39,7 +39,7 @@
 
 ## What This Does
 
-TakeMeter classifies posts from r/truegaming into four labels: `analysis`, `hot_take`, `question`, and `industry`. The goal is to sort high-effort design discussion and industry commentary from opinionated venting and recommendation requests. The classifier is a fine-tuned small language model, trained on 250 posts I labeled by hand from the public subreddit.
+TakeMeter classifies posts from r/truegaming into four labels: `analysis`, `hot_take`, `question`, and `industry`. The goal is to sort high-effort design discussion and industry commentary from opinionated venting and recommendation requests. The classifier is a fine-tuned small language model, trained on 236 posts I labeled by hand from the public subreddit.
 ---
 
 ## Label Taxonomy
@@ -104,11 +104,11 @@ Community: r/truegaming. Posts are sorted into four labels.
 
 | Label | Count | Share |
 |---|---|---|
-| `analysis` | 76 | 30.4% |
-| `hot_take` | 63 | 25.2% |
-| `industry` | 62 | 24.8% |
-| `question` | 49 | 19.6% |
-| **Total** | **250** | **100%** |
+| `analysis` | 75 | 31.8% |
+| `industry` | 62 | 26.3% |
+| `hot_take` | 51 | 21.6% |
+| `question` | 48 | 20.3% |
+| **Total** | **236** | **100%** |
 
 **Three hard cases**
 
@@ -131,19 +131,42 @@ Community: r/truegaming. Posts are sorted into four labels.
 
 ## The Training Run
 
-<!-- Your starting model, your settings, and anything you changed and why. -->
+**Base model:** `distilbert-base-uncased`
 
-**Base model:**
+**Settings:**
+- Epochs: 3
+- Learning rate: 2e-5
+- Batch size: 16
+- Max sequence length: 128
+- Device: MPS (Apple Silicon GPU)
+- Torch version: 2.14.1
+- Seed: 42
 
-**Settings:** <!-- epochs, learning rate, batch size, seed -->
+**Anything I changed from the defaults, and why:** Nothing. I used the default settings.
 
-**Anything I changed from the defaults, and why:**
+**Split sizes:**
 
-**Split sizes:** <!-- train / val / test, and per-label counts in the test
-split. If a label had fewer than about 8 in test, say so — it explains a lot
-of next unit's variance. -->
+| Label | Train | Val | Test |
+|---|---|---|---|
+| `analysis` | 52 | 12 | 11 |
+| `hot_take` | 35 | 8 | 8 |
+| `industry` | 43 | 9 | 10 |
+| `question` | 34 | 7 | 7 |
+| **Total** | **164** | **36** | **36** |
 
+**Training result (seed 42):**
 
+```
+accuracy  0.306
+macro F1  0.117
+
+analysis   F1 0.468
+hot_take   F1 0.000
+question   F1 0.000
+industry   F1 0.000
+```
+
+The model completely collapsed, predicting `analysis` for every test example. This gives 30.6% accuracy (close to the 31.8% share of `analysis` in the data) and 0.000 F1 for the other three classes. This is a real finding to diagnose in the next unit.
 
 ---
 
