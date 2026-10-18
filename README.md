@@ -39,50 +39,59 @@
 
 ## What This Does
 
-<!-- Your community, and what your classifier sorts posts into. Three or four
-     sentences. -->
-
-
+TakeMeter classifies posts from r/truegaming into four labels: `analysis`, `hot_take`, `question`, and `industry`. The goal is to sort high-effort design discussion and industry commentary from opinionated venting and recommendation requests. The classifier is a fine-tuned small language model, trained on 180 posts I labeled by hand from the public subreddit.
 
 ---
 
 ## Label Taxonomy
 
-<!-- Each label: a one-sentence definition and two real examples from your
-     reading. Then your decision rule for the hardest boundary.
+Community: r/truegaming. Posts are sorted into four labels.
 
-     The decision rule is worth a point on its own and it's the thing most
-     people leave out. Every taxonomy has a hardest boundary. Name yours. -->
+### `analysis`
 
-### `label_one`
-
-**Definition:**
+**Definition:** Explains how a game mechanic works, why a design choice was made, or how a genre evolved, using specific examples from games.
 
 **Example 1:**
->
+> Why the stamina system in Zelda: BOTW encourages exploration rather than punishing the player.
 
 **Example 2:**
->
+> How Dark Souls uses bonfires to teach players about risk and reward.
 
-### `label_two`
+### `hot_take`
 
-**Definition:**
+**Definition:** A strong, subjective opinion about a game's quality, a developer's decision, or the industry, aimed at provoking debate without deep mechanical breakdown.
 
 **Example 1:**
->
+> Open-world games are fundamentally worse than linear games and the industry needs to stop making them.
 
 **Example 2:**
->
+> The Last of Us Part II is a bad game because the story is bad, not because of the mechanics.
+
+### `question`
+
+**Definition:** A prompt asking for the community's perspective on a specific design topic, or asking for game recommendations based on mechanics rather than just genre.
+
+**Example 1:**
+> What game has the best inventory management system, and why does it work?
+
+**Example 2:**
+> I want a game with deep crafting but no survival mechanics. Any suggestions?
+
+### `industry`
+
+**Definition:** A post focused on the business side of gaming (layoffs, acquisitions, pricing models, publisher decisions) rather than the gameplay itself.
+
+**Example 1:**
+> The recent wave of layoffs shows that AAA budgets are unsustainable. Here is why...
+
+**Example 2:**
+> Why Microsoft's acquisition of Activision Blizzard is bad for the industry.
 
 ### The hardest boundary
 
-**Which two labels:**
+**Which two labels:** `analysis` and `hot_take`.
 
-**The decision rule I used every time:**
-<!-- e.g. "If the post names a specific checkable fact, it's `analysis`, even
-     if the tone is heated." -->
-
-
+**The decision rule I used every time:** If the post proposes a *mechanism* — a chain of cause and effect a reader could check ("because the stamina drains when climbing, players plan their routes") — it is `analysis`, even if the tone is heated. If the post only stacks evidence to support a preset verdict and never decomposes the mechanism, it is `hot_take`.
 
 ---
 

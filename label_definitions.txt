@@ -5,6 +5,7 @@
 #
 # Delete the examples below and put yours in.
 
-analysis: makes an argument backed by a specific, checkable fact
-hot_take: a confident claim with no support offered
-reaction: an immediate response to something that just happened
+analysis: explains how a game mechanic works, why a design choice was made, or how a genre evolved, using specific examples from games
+hot_take: a strong, subjective opinion about a game's quality, a developer's decision, or the industry, aimed at provoking debate without deep mechanical breakdown
+question: a prompt asking for the community's perspective on a specific design topic, or asking for game recommendations based on mechanics rather than just genre
+industry: a post focused on the business side of gaming (layoffs, acquisitions, pricing models, publisher decisions) rather than the gameplay itself
