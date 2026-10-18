@@ -51,63 +51,43 @@ whether you hit them:
 
 ---
 
-## 1.
+## 1. Overall accuracy ≥ 0.60
 
-<!-- Your criterion. It must name a number. -->
+On the held-out test set, overall accuracy is at least 0.60.
 
-
-
-**Why this target:**
-
-
+**Why this target:** Four labels means a random guesser gets 0.25. With only ~27 test posts, 0.60 is defensible; 0.65 would be too optimistic for this data size.
 
 ---
 
-## 2.
+## 2. Macro F1 ≥ 0.50
 
-<!-- Your criterion. -->
+The macro-averaged F1 across all labels is at least 0.50.
 
-
-
-**Why this target:**
-
-
+**Why this target:** Macro F1 forces the model to learn every label, not just the majority class. A model that only predicts one label gets a macro F1 near 0.20.
 
 ---
 
-## 3.
+## 3. Every label reaches F1 ≥ 0.40
 
-<!-- Your criterion. -->
+No label scores below 0.40 F1.
 
-
-
-**Why this target:**
-
-
+**Why this target:** Below 0.40 means the model isn't learning the label at all. I allow 0.40 (not 0.50) because the smallest labels will have fewer than 8 test examples, making their scores highly variable.
 
 ---
 
-## 4.
+## 4. No label exceeds 55% of the labeled set
 
-<!-- Your criterion. -->
+No single label makes up more than 55% of `labels.csv`.
 
-
-
-**Why this target:**
-
-
+**Why this target:** The hard cap is 70%. I aim for 55% so a majority-class guesser scores at most 0.55, forcing the model to learn distinctions.
 
 ---
 
-## 5.
+## 5. Same seed, same accuracy to three decimals
 
-<!-- Your criterion. -->
+Running the notebook twice with the same seed produces the same accuracy to three decimal places.
 
-
-
-**Why this target:**
-
-
+**Why this target:** If two runs differ, there is a nondeterminism bug, and no other metric can be trusted.
 
 ---
 
