@@ -172,26 +172,19 @@ The model completely collapsed, predicting `analysis` for every test example. Th
 
 ## How I Used AI
 
-<!-- Two specific moments — what you asked, what came back, what you changed.
+**Moment 1 — Refining the Label Taxonomy**
 
-     ⚠️ Plus disclosure of any pre-labelling. If you had a model pre-label a
-     batch and then read and corrected every one, say that. It's an allowed
-     workflow and disclosing it costs you nothing. Not disclosing it is the
-     problem. -->
+- *What I asked for:* assistance in drafting the definitions and boundary rules for the `analysis` and `hot_take` labels.
+- *What came back:* a preliminary definitional distinction based on the presence of data ("analysis includes statistics; hot_take does not").
+- *What I changed:* this initial distinction proved inadequate, as many posts categorized as `hot_take` cite statistics to support a pre-existing conclusion. I rewrote the decision rule to hinge on the proposal of a verifiable *mechanism* rather than the mere presence of *evidence*. The final rule states that `analysis` must propose a chain of cause and effect a reader could check; if evidence is used solely to bolster a preset verdict without decomposing the mechanism, it is classified as `hot_take`.
 
-**Moment 1**
+**Moment 2 — Dataset Annotation Workflow**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* a batch of 30 forum posts to be pre-labeled by Claude based on the finalized `analysis` and `hot_take` definitions.
+- *What came back:* labels that were generally accurate for `reaction` and `hot_take`, but demonstrated a systematic over-assignment of the `analysis` label for posts that merely cited statistics without providing mechanistic reasoning.
+- *What I changed:* I conducted a manual review of every AI-labeled row against the decision rule, correcting the misclassified `analysis` posts to `hot_take`. To ensure the integrity of the annotation process, the first 20 posts were labeled manually (`cold`) without Claude assistance, while the remaining 216 posts were Claude pre-labeled and subsequently verified (`pre-labeled`).
 
-**Moment 2**
-
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
-
-**Pre-labelling disclosure:**
+**Pre-labelling disclosure:** Yes. The first 20 rows were labeled by hand without AI. The remaining 216 were AI pre-labeled and then manually reviewed and corrected.
 
 <!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
 
