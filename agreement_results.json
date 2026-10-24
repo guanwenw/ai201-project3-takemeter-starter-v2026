@@ -1,0 +1,28 @@
+{
+  "compared": 30,
+  "agreed": 26,
+  "agreement_rate": 0.8666666666666667,
+  "disagreements": [
+    {
+      "text": "Carbon plates aren't the whole story. My times dropped 2% in the shoes and another 2% the following year in the same pair, when the only thing that changed was going from 35 to 50 miles a week.",
+      "staff": "analysis",
+      "mine": "hot_take"
+    },
+    {
+      "text": "Three of us ran the same session on the same day, different shoes, within 10 seconds of each other over 5 miles. I'm not saying shoes do nothing, but whatever they do was smaller than the noise between three people.",
+      "staff": "analysis",
+      "mine": "hot_take"
+    },
+    {
+      "text": "Wind was so bad on the out section I was leaning at about 20 degrees. Coming back felt like cheating.",
+      "staff": "reaction",
+      "mine": "hot_take"
+    },
+    {
+      "text": "Third DNF this year. I don't really want to talk about it, just wanted to put it somewhere.",
+      "staff": "reaction",
+      "mine": "hot_take"
+    }
+  ],
+  "staff_posts_not_in_mine": 0
+}

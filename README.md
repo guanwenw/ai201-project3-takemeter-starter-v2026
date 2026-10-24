@@ -257,55 +257,50 @@ The opposite happened. The fine-tuned model scored *worse* than the baseline on 
 
 ## Agreement Report
 
-<!-- Your rate against the staff set, and every disagreement adjudicated.
-
-     Remember you labelled these 30 under the STAFF taxonomy in
-     data/staff_taxonomy.md, not your own — so every argument below is made
-     from those definitions and those decision rules. -->
-
-**Agreement rate:** ___ / 30 = ___%
-
-<!-- Nobody grades this number. A 60% who argues every disagreement from the
-     stated rules beats a 95% who wrote "staff was right" nine times. Several
-     of the 30 were chosen because they're genuinely ambiguous — you should be
-     winning some of these. -->
+**Agreement rate:** 26 / 30 = 87%
 
 **Disagreements**
 
-<!-- Three lines each: the post, both labels, and who you think is right and
-     why — grounded in the staff definitions you were both applying.
-
-     Then sort each into one of three piles:
-       (a) the rule covered it and I applied it loosely → a consistency problem
-       (b) the rule genuinely doesn't say               → a gap in the definitions
-       (c) the rule is ambiguous here and my reading is defensible → argue it.
-           This is a legitimate win.
-
-     Pile (a) is the one that matters most for your diagnosis: if you applied a
-     written rule two different ways on 30 posts, that is direct evidence about
-     what you did across your own 200. -->
-
 **1.**
-> *The post:*
+> *The post:* "Carbon plates aren't the whole story. My times dropped 2% in the shoes and another 2% the following year in the same pair, when the only thing that changed was going from 35 to 50 miles a week."
 >
-> *Staff said / I said:*
+> *Staff said / I said:* Staff said `analysis` / I said `hot_take`
 >
-> *My call, and why:*
+> *My call, and why:* Staff is right, and I applied the rule too loosely. The post uses two specific numeric comparisons (2% in shoes, 2% from training volume) to argue that the shoes are not the sole cause of improvement. Under Rule 1, the facts carry the argument, so it is `analysis`.
 >
-> *Which pile:*
+> *Which pile:* (a) the rule covered it and I applied it loosely.
 
 **2.**
-> *The post:*
+> *The post:* "Three of us ran the same session on the same day, different shoes, within 10 seconds of each other over 5 miles. I'm not saying shoes do nothing, but whatever they do was smaller than the noise between three people."
 >
-> *Staff said / I said:*
+> *Staff said / I said:* Staff said `analysis` / I said `hot_take`
 >
-> *My call, and why:*
+> *My call, and why:* Staff is right, and again I applied Rule 1 too strictly. The post cites a specific comparison (three people, same session, within 10 seconds) to make a measurable claim about the effect size of shoes. The fact is load-bearing. I downgraded it because it "felt" anecdotal, but Rule 1 does not require large samples — only that the fact does the argumentative work.
 >
-> *Which pile:*
+> *Which pile:* (a) the rule covered it and I applied it loosely.
+
+**3.**
+> *The post:* "Wind was so bad on the out section I was leaning at about 20 degrees. Coming back felt like cheating."
+>
+> *Staff said / I said:* Staff said `reaction` / I said `hot_take`
+>
+> *My call, and why:* Staff is right, and this is a Rule 2 issue. The post is about the writer's immediate experience during a run (leaning at 20 degrees in the wind), not a general claim about the world. I misclassified it as `hot_take` because "felt like cheating" sounds like an opinion, but the entire post is a personal, in-the-moment report.
+>
+> *Which pile:* (a) the rule covered it and I applied it loosely.
+
+**4.**
+> *The post:* "Third DNF this year. I don't really want to talk about it, just wanted to put it somewhere."
+>
+> *Staff said / I said:* Staff said `reaction` / I said `hot_take`
+>
+> *My call, and why:* Staff is right, and this is the same Rule 2 issue. "This year" and "wanted to put it somewhere" indicate an immediate, personal emotional response to a recent event (a DNF). I classified it as `hot_take` because "Third DNF" reads like a summary, but the staff taxonomy treats personal emotional disclosure as `reaction`, even if it references the season.
+>
+> *Which pile:* (a) the rule covered it and I applied it loosely.
 
 **What the pattern in my disagreements tells me:**
+All four disagreements fall into pile (a) — I applied the staff's written rules too loosely. The pattern is clear: I consistently downgrade posts with a dismissive or summary tone to `hot_take`, even when the rules say otherwise. Under Rule 1, I failed to recognize load-bearing facts when they appeared in short posts. Under Rule 2, I failed to recognize immediate personal experience when it referenced a longer time frame ("this year") or used opinion-like phrasing ("felt like cheating").
 
-
+This directly explains why my `r/truegaming` model collapsed: if my labels systematically collapse `analysis` into `hot_take` and `reaction` into `hot_take`, then the model has no chance to learn the `hot_take` boundary, and the class distribution is skewed toward a false `hot_take` majority.
 
 ---
 
