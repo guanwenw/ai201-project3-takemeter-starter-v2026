@@ -214,62 +214,44 @@ The opposite happened. The fine-tuned model scored *worse* than the baseline on 
 
 ## Run Log — Before
 
-<!-- Five criteria across three seeds. The notebook's section 6 prints the
-     spread table; the Target and Verdict columns are yours. -->
-
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. Overall accuracy ≥ 0.60 | 0.60 | 0.306 | 0.361 | 0.306 | **MISSED** |
+| 2. Macro F1 ≥ 0.55 | 0.55 | 0.117 | 0.206 | 0.171 | **MISSED** |
+| 3. Every label reaches F1 ≥ 0.40 | 0.40 | 0.117 | 0.206 | 0.171 | **MISSED** |
+| 4. No label exceeds 55% of the labeled set | 55% | 31.8% | 31.8% | 31.8% | **MET** |
+| 5. Same seed produces the same accuracy | = 0.306 | 0.306 | 0.306 | 0.306 | **MET** |
+
+**Note on seed stability:** Accuracy moved 0.056 across seeds, exceeding the 5% threshold. `industry` F1 swung from 0.000 to 0.333. The model is completely unstable on that label.
 
 ### Confusion matrix
 
-<!-- ⚠️ TYPED AS A MARKDOWN TABLE. The notebook prints one ready to paste.
-     An image of a matrix earns nothing. -->
-
-| true \ predicted |  |  |  |
-|---|---|---|---|
-| **** |  |  |  |
-| **** |  |  |  |
-| **** |  |  |  |
+| true \ predicted | analysis | hot_take | question | industry |
+|---|---|---|---|---|
+| **analysis** | 11 | 0 | 0 | 0 |
+| **hot_take** | 8 | 0 | 0 | 0 |
+| **question** | 7 | 0 | 0 | 0 |
+| **industry** | 10 | 0 | 0 | 0 |
 
 **My biggest off-diagonal number, and what it means:**
-<!-- Not "the model made mistakes" — WHICH boundary it didn't learn, and which
-     direction. "7 real analysis posts were called hot_take and only 3 went the
-     other way" is a direction, not just an error rate. -->
-
-
+10 real `industry` posts were called `analysis`. But the matrix shows something worse: the model predicted `analysis` for **every single post**, regardless of its true label. There is no "confusion" between two boundaries — the model has entirely collapsed into predicting a single class. This is a total failure of the classifier, not a boundary issue.
 
 ---
 
 ## Verdicts and Diagnoses
 
-<!-- MET or MISSED against LAST UNIT's target. The target has to hold across
-     all three seeds, not turn up sometimes. -->
-
 | # | Criterion | Target | Verdict | How I decided |
 |---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
+| 1 | Overall accuracy ≥ 0.60 | 0.60 | **MISSED** | Best seed was 0.361, far below 0.60. |
+| 2 | Macro F1 ≥ 0.55 | 0.55 | **MISSED** | Best seed was 0.206, far below 0.55. |
+| 3 | Every label reaches F1 ≥ 0.40 | 0.40 | **MISSED** | Only `analysis` scored above 0.40 in any seed; the other three labels are 0.000 or barely above. |
+| 4 | No label exceeds 55% | 55% | **MET** | Largest label is 31.8%, well under the 55% cap. |
+| 5 | Same seed produces the same accuracy | = 0.306 | **MET** | Accuracy was 0.306 in all three seeds (deterministic). |
 
 **Diagnoses**
 
-<!-- For each miss: the cause, and how you know. The four common causes are:
-     too few examples for a label, a boundary you applied inconsistently, a
-     genuinely hard label pair, and a task the model can't reach from this
-     much data.
-
-     ⚠️ Use your agreement report as evidence. It is the only instrument you
-     have that can tell a LABELLING problem from a MODEL problem, and this
-     section is graded on whether you used it that way. -->
-
-
+- **Criterion 1 (Accuracy MISSED):** The model collapsed and predicted `analysis` for every test post, yielding 30.6% accuracy — exactly the share of `analysis` in the test split. This is a total majority-class collapse, not a partial one.
+- **Criterion 2 & 3 (Macro F1 and per-label F1 MISSED):** The model has not learned to distinguish any of the four labels. The confusion matrix shows zero off-diagonal errors for `hot_take`, `question`, and `industry` — but that's because there are *no correct predictions* for those classes, not because the model mastered them. The root cause is likely the 128-token truncation, which cuts off the very content that distinguishes these long posts, combined with the small dataset (only ~50 examples per class).
 
 ---
 
