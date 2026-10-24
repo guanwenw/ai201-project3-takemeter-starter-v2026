@@ -195,25 +195,20 @@ The model completely collapsed, predicting `analysis` for every test example. Th
 
 ## Baseline vs. Trained
 
-<!-- Both models on the same posts. `python baseline.py --trained results.json`
-     prints this table for you. -->
-
 | Measure | Baseline | Trained | Difference |
 |---|---|---|---|
-| Overall accuracy |  |  |  |
-| Macro F1 |  |  |  |
-| F1 — `label_one` |  |  |  |
-| F1 — `label_two` |  |  |  |
+| Overall accuracy | 0.361 | 0.306 | -0.055 |
+| Macro F1 | 0.306 | 0.117 | -0.189 |
+| F1 — `analysis` | 0.455 | 0.468 | +0.013 |
+| F1 — `hot_take` | 0.308 | 0.000 | -0.308 |
+| F1 — `industry` | 0.000 | 0.000 | +0.000 |
+| F1 — `question` | 0.462 | 0.000 | -0.462 |
 
 **What I predicted before I looked:**
-<!-- Milestone 1 asks you to write this BEFORE seeing the trained numbers. A
-     prediction made afterwards isn't one. -->
+I predicted that the trained model would beat the baseline on overall accuracy and on the F1 for `question` and `industry`, because the baseline is a general zero-shot model without fine-tuning. However, given the 128-token truncation and small data size, I expected both models to struggle, with the trained model only slightly ahead.
 
 **What the gap actually means:**
-<!-- If the baseline matched your trained model, your fine-tuning added
-     nothing — and that is a real finding, not a failure. Say it plainly. -->
-
-
+The opposite happened. The fine-tuned model scored *worse* than the baseline on overall accuracy (0.306 vs 0.361) and macro F1 (0.117 vs 0.306). It completely lost the ability to classify `hot_take` and `question` (both dropped to 0.000), while the baseline maintained F1 scores of 0.308 and 0.462 on those labels. The only class the trained model improved on was `analysis` (+0.013), which is the majority class. This confirms that my fine-tuning caused a majority-class collapse — the model learned to predict `analysis` (or `industry`) for everything, destroying the other boundaries. This is a real, diagnostic finding: the training data was too imbalanced and too short (128 tokens) for the model to learn the minority classes.
 
 ---
 
