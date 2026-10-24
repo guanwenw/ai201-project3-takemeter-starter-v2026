@@ -250,8 +250,9 @@ The opposite happened. The fine-tuned model scored *worse* than the baseline on 
 
 **Diagnoses**
 
-- **Criterion 1 (Accuracy MISSED):** The model collapsed and predicted `analysis` for every test post, yielding 30.6% accuracy — exactly the share of `analysis` in the test split. This is a total majority-class collapse, not a partial one.
-- **Criterion 2 & 3 (Macro F1 and per-label F1 MISSED):** The model has not learned to distinguish any of the four labels. The confusion matrix shows zero off-diagonal errors for `hot_take`, `question`, and `industry` — but that's because there are *no correct predictions* for those classes, not because the model mastered them. The root cause is likely the 128-token truncation, which cuts off the very content that distinguishes these long posts, combined with the small dataset (only ~50 examples per class).
+- **Criterion 1 (Accuracy MISSED):** The model collapsed and predicted `analysis` for every test post, yielding 30.6% accuracy. My agreement report shows that I systematically collapse `analysis` into `hot_take` (2 of 4 disagreements) and `reaction` into `hot_take` (2 of 4). This means my training data for `hot_take` is artificially inflated, while `analysis` and `reaction` are under-represented. The model, seeing an inflated `hot_take` class, should have collapsed to `hot_take`. Instead, it collapsed to `analysis` — a sign that the 128-token truncation is hiding the structural differences between these long posts.
+- **Criterion 2 & 3 (Macro F1 and per-label F1 MISSED):** Same root cause. The model has no ability to distinguish `hot_take`, `question`, or `industry` from `analysis`. My agreement report proves that my own `r/truegaming` labels are likely inconsistent — if I can't apply the staff's clear rules consistently, my own labels are even more suspect. The model learned nothing because the ground truth is noisy.
+- **Criterion 4 (Balance MET):** The dataset itself is balanced (largest label 31.8%), so this criterion passes regardless of model performance.
 
 ---
 
