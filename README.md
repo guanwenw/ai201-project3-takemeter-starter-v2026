@@ -252,13 +252,14 @@ The opposite happened. The fine-tuned model scored *worse* than the baseline on 
 | 2 | Macro F1 ≥ 0.55 | 0.55 | **MISSED** | Best seed was 0.206, far below 0.55. |
 | 3 | Every label reaches F1 ≥ 0.40 | 0.40 | **MISSED** | Only `analysis` scored above 0.40 in any seed; the other three labels are 0.000 or barely above. |
 | 4 | No label exceeds 55% | 55% | **MET** | Largest label is 31.8%, well under the 55% cap. |
-| 5 | Same seed produces the same accuracy | = 0.306 | **MET** | Accuracy was 0.306 in all three seeds (deterministic). |
+| 5 | Same seed produces the same accuracy | = 0.306 | **MISSED** | Accuracy was 0.306 in all three seeds (deterministic). |
 
 **Diagnoses**
 
 - **Criterion 1 (Accuracy MISSED):** The model collapsed and predicted `analysis` for every test post, yielding 30.6% accuracy. My agreement report shows that I systematically collapse `analysis` into `hot_take` (2 of 4 disagreements) and `reaction` into `hot_take` (2 of 4). This means my training data for `hot_take` is artificially inflated, while `analysis` and `reaction` are under-represented. The model, seeing an inflated `hot_take` class, should have collapsed to `hot_take`. Instead, it collapsed to `analysis` — a sign that the 128-token truncation is hiding the structural differences between these long posts.
 - **Criterion 2 & 3 (Macro F1 and per-label F1 MISSED):** Same root cause. The model has no ability to distinguish `hot_take`, `question`, or `industry` from `analysis`. My agreement report proves that my own `r/truegaming` labels are likely inconsistent — if I can't apply the staff's clear rules consistently, my own labels are even more suspect. The model learned nothing because the ground truth is noisy.
 - **Criterion 4 (Balance MET):** The dataset itself is balanced (largest label 31.8%), so this criterion passes regardless of model performance.
+- **Criterion 5 (MISSED):** This is a testing error, not a model error. I failed to run the required test (same seed twice). My log shows three different seeds (0.306, 0.361, 0.333), which cannot prove reproducibility. I am marking this MISSED because I did not measure what the criterion asked for.
 
 ---
 
@@ -325,7 +326,7 @@ This directly explains why my `r/truegaming` model collapsed: if my labels syste
 | 2. Macro F1 ≥ 0.55 | 0.55 | 0.122 | 0.206 | 0.210 | **MISSED** |
 | 3. Every label reaches F1 ≥ 0.40 | 0.40 | 0.122 | 0.206 | 0.210 | **MISSED** |
 | 4. No label exceeds 55% of the labeled set | 55% | 31.8% | 31.8% | 31.8% | **MET** |
-| 5. Same seed produces the same accuracy | = 0.306 | 0.306 | 0.361 | 0.333 | **MET** |
+| 5. Same seed produces the same accuracy | = 0.306 | 0.306 | 0.361 | 0.333 | **MISSED** |
 
 **Did it help, and how do I know:**
 No, it did not help. The overall accuracy and macro F1 remained virtually identical to the "before" run (accuracy: 0.306/0.361/0.333 vs 0.306/0.361/0.306). The confusion matrix still shows a near-total collapse: 34 out of 36 posts were classified as `analysis`, with only two lucky correct guesses for `question` and `industry` across different seeds.
