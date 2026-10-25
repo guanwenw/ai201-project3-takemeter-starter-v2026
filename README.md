@@ -186,6 +186,12 @@ The model completely collapsed, predicting `analysis` for every test example. Th
 
 **Pre-labelling disclosure:** Yes. The first 20 rows were labeled by hand without AI. The remaining 216 were AI pre-labeled and then manually reviewed and corrected.
 
+**Moment 3 — Unit 6**
+
+- *What I asked for:* I gave an AI the "Before" and "After" confusion matrices and asked it to tell me whether increasing `MAX_LENGTH` had changed the model's behavior at all.
+- *What came back:* It pointed out that in both matrices, the model predicted `analysis` for 34 out of 36 posts. The only difference was that in the "After" run, it occasionally guessed `question` or `industry` correctly by chance, which inflated Macro F1 slightly.
+- *What I changed:* I originally wanted to say the improvement "helped slightly" because Macro F1 went from 0.171 to 0.210 in one seed. After reading the AI's comparison, I rewrote my conclusion to say the improvement did not help — the model still collapsed into `analysis`, and the tiny F1 bump was random noise, not learning.
+
 <!-- ═══════════════════════ UNIT 6 — THE TEST ═══════════════════════
 
      Don't fill these in during unit 5.
@@ -307,40 +313,36 @@ This directly explains why my `r/truegaming` model collapsed: if my labels syste
 
 ## The Improvement
 
-**What I changed:**
+**What I changed:** I increased the `MAX_LENGTH` from 128 to 512 tokens in the notebook's Section 2. This allows the model to read the full text of the longer `r/truegaming` posts instead of truncating them to the first few sentences.
 
-**Which diagnosis pointed at it:**
+**Which diagnosis pointed at it:** My agreement report showed that my labels were inconsistent, but my confusion matrix from the "before" run showed a total collapse into `analysis`. I hypothesized that because `r/truegaming` posts are long and often start with similar conversational intros, truncating at 128 tokens meant the model only saw the intros and never saw the actual mechanics or arguments. The model couldn't learn the boundaries because it couldn't see the distinguishing features.
 
 ### Run Log — After
 
 | Criterion | Target | Seed 42 | Seed 7 | Seed 2024 | Verdict |
 |---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |
+| 1. Overall accuracy ≥ 0.60 | 0.60 | 0.306 | 0.361 | 0.333 | **MISSED** |
+| 2. Macro F1 ≥ 0.55 | 0.55 | 0.122 | 0.206 | 0.210 | **MISSED** |
+| 3. Every label reaches F1 ≥ 0.40 | 0.40 | 0.122 | 0.206 | 0.210 | **MISSED** |
+| 4. No label exceeds 55% of the labeled set | 55% | 31.8% | 31.8% | 31.8% | **MET** |
+| 5. Same seed produces the same accuracy | = 0.306 | 0.306 | 0.361 | 0.333 | **MET** |
 
 **Did it help, and how do I know:**
+No, it did not help. The overall accuracy and macro F1 remained virtually identical to the "before" run (accuracy: 0.306/0.361/0.333 vs 0.306/0.361/0.306). The confusion matrix still shows a near-total collapse: 34 out of 36 posts were classified as `analysis`, with only two lucky correct guesses for `question` and `industry` across different seeds.
 
-<!-- If it didn't, say so. Relabelling that didn't help is a genuinely
-     interesting result and earns full credit. -->
-
-
+The honest conclusion is that the 128-token truncation was not the root cause of the model's failure. The real problem is more fundamental: **the dataset is too small (164 training examples) and the model is too weak (DistilBERT) to learn the subtle boundaries between `analysis`, `hot_take`, and `industry` from so few examples, even when shown the full text.** Increasing `MAX_LENGTH` is a valid experiment, but it reveals that the bottleneck is data quantity and model capacity, not input length.
 
 ---
 
 ## What's Still Broken
 
-<!-- For each criterion still missed: what you'd do, and why you stopped. -->
+- **Criterion 1 (Overall accuracy):** MISSED (0.306–0.361 < 0.60). The model cannot achieve even 60% accuracy with this small dataset. I would need at least 500–1,000 examples per label to train a model that can learn these boundaries.
+- **Criterion 2 & 3 (Macro F1 and per-label F1):** MISSED (0.122–0.210 < 0.55). `hot_take`, `question`, and `industry` all have F1 scores near zero. The model simply cannot distinguish these labels from `analysis` in the current setup.
+- **Criterion 4 (Balance):** MET. The dataset is balanced enough to satisfy this criterion, but it did not translate into a better model.
+- **Criterion 5 (Reproducibility):** MET. The model is deterministic, but deterministically bad.
 
-
-
-**The gap between what I meant my labels to capture and what the model
-learned:**
-<!-- Two sentences. Your confusion matrix is the evidence. -->
-
-
+**The gap between what I meant my labels to capture and what the model learned:**
+My labels were meant to capture four distinct functional categories: explaining mechanics (`analysis`), asserting opinions (`hot_take`), asking for recommendations (`question`), and discussing business/industry (`industry`). The model learned only that almost everything starts with a conversational intro and can be guessed as `analysis`. The confusion matrix shows that 34 of 36 posts were predicted as `analysis`, meaning the model has no concept of the boundaries I defined.
 
 <!-- ═════════════════════════════════════════════════════════════════════
 
